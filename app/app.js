@@ -10,4 +10,4 @@ var App = Ember.Application.create({
 import routes from 'appkit/routes';
 App.Router.map(routes); // TODO: just resolve the router
 
-export default App;
+export { App };
