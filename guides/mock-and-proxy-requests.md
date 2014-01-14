@@ -8,14 +8,14 @@ Ember App Kit allows you to either mock responses or proxy requests to a proxy s
 
 ### Mock responses
 
-If you want to mock respones have a further look in the
+If you want to mock responses have a further look in the
 [api-stub/README](https://github.com/stefanpenner/ember-app-kit/tree/master/api-stub),
 which gives a detailed example on how to stub API calls. Basically you define the
 mocked responses in `api-stub/routes.js`:
 
 {% highlight js %}
-module.exports = function(server) {
-  server.namespace("/api", function() {
+module.exports = function(server, namespace) {
+  server.namespace(namespace, function() {
     server.get('/posts', function(req, res) {
       res.send({ post: { body: "hello mocking world" } });
     });
@@ -37,11 +37,15 @@ export default Ember.Route.extend({
 });
 {% endhighlight %}
 
-To serve the mocked responses, specify the `APIMethod` property in the `package.json`
+To serve the mocked responses, specify the `api.method` property in the `package.json`
 to be `stub`:
 
 {% highlight js %}
-  APIMethod: "stub"
+    "api": {
+        "method": "stub",
+        "host": "http://apiserver.dev:3000",
+        "namespace": "/api"
+    }
 {% endhighlight %}
 
 Next time you start the server with `grunt server` it will use the mocked responses.
@@ -52,8 +56,11 @@ Ember App Kit also allows you to forward requests to a proxy server. Set the fol
 properties in your `package.json`:
 
 {% highlight js %}
-  APIMethod: "proxy",
-  proxyURL: "http://apiserver.dev:3000"
+    "api": {
+        "method": "proxy",
+        "host": "http://apiserver.dev:3000",
+        "namespace": "/api"
+    }
 {% endhighlight %}
 
 This proxies all requests for a URL starting with `/api` to the proxy server.
